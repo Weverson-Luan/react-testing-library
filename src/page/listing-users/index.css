@@ -1,0 +1,11 @@
+.card-users{
+  width: 300px;
+  height: 80px;
+  background-color: #d3d3d3;
+  margin-top: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  padding-left: 16px;
+  padding-top: 8px;
+  border: 1px solid #cdcdcd;
+}
