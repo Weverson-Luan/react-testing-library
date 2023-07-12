@@ -1,21 +1,25 @@
+/**
+ * IMPORTS
+ */
 import { render, screen, fireEvent } from "@testing-library/react";
+
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 
-import { Tasks } from "..";
+// screen
+import { RegisterUser } from "../register-user";
 
-describe("Task Component", () => {
+describe("Create User New", () => {
   const worker = setupServer(
-    rest.get(
-      "https://jsonplaceholder.typicode.com/todos",
+    rest.post(
+      "https://reqres.in/api/users",
       async (request, response, context) => {
+        await request.json();
         return response(
-          context.json([
-            {
-              id: "1",
-              title: "Correr 10 minutos",
-            },
-          ])
+          context.json({
+            name: "Luan Dev",
+            id: 1,
+          })
         );
       }
     )
@@ -29,17 +33,17 @@ describe("Task Component", () => {
     worker.resetHandlers();
   });
 
-  it("should fetch and show task on button click", async () => {
-    render(<Tasks />);
+  it("should be possible to create users", async () => {
+    render(<RegisterUser />);
 
     // procurando pelo botão pelo texto
-    const elementButton = screen.getByText(/Buscar atividades/i);
+    const elementButtonRegisterUser = screen.getByText(/Registre/i);
 
     // vamos fazer  um onclick no botão
-    fireEvent.click(elementButton);
+    fireEvent.click(elementButtonRegisterUser);
 
     // depois que usuário clickou no botão vamos ver se temos a task em tela
-    await screen.findByText("Correr 10 minutos");
+    await screen.findByText("Luan Dev");
   });
 
   /**
@@ -47,25 +51,25 @@ describe("Task Component", () => {
    */
   it("should show error message on fetch error", async () => {
     worker.use(
-      rest.get(
-        "https://jsonplaceholder.typicode.com/todos",
+      rest.post(
+        "https://reqres.in/api/users",
         async (request, response, context) => {
           return response(
-            context.status(500),
-            context.json({ message: "Request failed with status code 500" })
+            context.status(404),
+            context.json({ message: "Request failed with status code 404!" })
           );
         }
       )
     );
-    render(<Tasks />);
+    render(<RegisterUser />);
 
     // procurando pelo botão pelo texto
-    const elementButton = screen.getByText(/Buscar atividades/i);
+    const elementButton = screen.getByText(/Registre/i);
 
     // vamos fazer  um onclick no botão
     fireEvent.click(elementButton);
 
-    // depois que usuário clickou no botão vamos ver se temos a task em tela
-    await screen.findByText("Request failed with status code 500");
+    // depois que usuário clickou para fazer sua criação vamos receber um error
+    await screen.findByText("Request failed with status code 404!");
   });
 });

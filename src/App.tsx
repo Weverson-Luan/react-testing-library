@@ -1,14 +1,12 @@
 import { Button } from "./components/button";
-import { SignIn } from "./page/signin";
-
+import { Home } from "./page/home/home";
+import { SignIn } from "./page/signin/signin";
+import "./index.css";
+import { RegisterUser } from "./page/register-user/register-user";
 function App() {
   return (
     <div className="App">
-      <h1>WLTECH Treinamento</h1>
-
-      <p>Bem vindo a introdução do jest com react-testing-library</p>
-      <SignIn />
-     
+      <RegisterUser />
     </div>
   );
 }
