@@ -49,7 +49,7 @@ describe("Create User New", () => {
   /**
    * MOSTRAR UMA MENSAGEM DE ERROR SE NOSSA REQUISÃO FALHAR
    */
-  it("should show error message on fetch error", async () => {
+  it("should show error message if user sends some invalid parameter to api", async () => {
     worker.use(
       rest.post(
         "https://reqres.in/api/users",

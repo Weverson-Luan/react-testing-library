@@ -1,34 +1,17 @@
 /**
  * IMPORTS
  */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "../../components/button";
 import axios from "axios";
 
-interface IUserData {
-  id: string;
-  name: string;
-  createdAt: string;
-}
 const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [users, setUsers] = useState<IUserData[]>([]);
+
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
-
-  const handleGetAllUsers = async () => {
-    try {
-      const response: IUserData[] = [];
-
-      if (response) {
-        setUsers(response);
-      }
-    } catch (error: any) {
-      setErrorMessage(error.message);
-    }
-  };
 
   const handleLoginWithAPI = async () => {
     try {
@@ -42,14 +25,11 @@ const SignIn = () => {
       setToken(response.data.token);
       setEmail("");
       setPassword("");
-    } catch (error) {
+    } catch (error: any) {
+      setErrorMessage(error.message);
       return error;
     }
   };
-
-  useEffect(() => {
-    handleGetAllUsers();
-  }, []);
 
   return (
     <div style={styles.container}>
@@ -91,9 +71,15 @@ const SignIn = () => {
         />
       </div>
 
-      <div style={{ marginTop: 16 }}>
-        token de usuario logado: {isLoading ? <p>carregando...</p> : token}
-      </div>
+      <>
+        {errorMessage ? (
+          <p>{errorMessage}</p>
+        ) : (
+          <div style={{ marginTop: 16 }}>
+            token de usuario logado: {isLoading ? <p>carregando...</p> : token}
+          </div>
+        )}
+      </>
     </div>
   );
 };

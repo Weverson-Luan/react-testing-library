@@ -6,7 +6,7 @@ import { RegisterUser } from "./page/register-user/register-user";
 function App() {
   return (
     <div className="App">
-      <RegisterUser />
+      <SignIn />
     </div>
   );
 }
